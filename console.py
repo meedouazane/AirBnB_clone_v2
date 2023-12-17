@@ -15,8 +15,7 @@ from models.review import Review
 class HBNBCommand(cmd.Cmd):
     """Contains the functionality for the HBNB console"""
 
-    # determines prompt for interactive/non-interactive modes
-    prompt = "(hbnb) " if sys.__stdin__.isatty() else ""
+    prompt = "(hbnb) "
 
     classes = {
         "BaseModel": BaseModel,
@@ -36,11 +35,6 @@ class HBNBCommand(cmd.Cmd):
         "latitude": float,
         "longitude": float,
     }
-
-    def preloop(self):
-        """Prints if isatty is false"""
-        if not sys.__stdin__.isatty():
-            print("(hbnb)")
 
     def precmd(self, line):
         """Reformat command line for advanced command syntax.
@@ -90,21 +84,11 @@ class HBNBCommand(cmd.Cmd):
                         _args = pline.replace(",", "")
                         # _args = _args.replace('\"', '')
             line = " ".join([_cmd, _cls, _id, _args])
-            print(_cmd)
-            print(_cls)
-            print(_id)
-            print(_args)
 
         except Exception:
             pass
         finally:
             return line
-
-    def postcmd(self, stop, line):
-        """Prints if isatty is false"""
-        if not sys.__stdin__.isatty():
-            print("(hbnb) ", end="")
-        return stop
 
     def do_quit(self, command):
         """Method to exit the HBNB console"""
