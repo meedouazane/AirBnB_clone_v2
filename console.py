@@ -2,6 +2,7 @@
 """ Console Module """
 import cmd
 import sys
+from os import getenv
 from models.base_model import BaseModel
 from models.__init__ import storage
 from models.user import User
@@ -166,7 +167,7 @@ class HBNBCommand(cmd.Cmd):
         new_instance = HBNBCommand.classes[cls]()
         for key, value in attributes.items():
             setattr(new_instance, key, value)
-        storage.save()
+        BaseModel.save(new_instance)
         print(new_instance.id)
 
     def help_create(self):
@@ -242,21 +243,19 @@ class HBNBCommand(cmd.Cmd):
 
     def do_all(self, args):
         """Shows all objects, or all objects of a class"""
-        print_list = []
+        objects = []
 
         if args:
             args = args.split(" ")[0]  # remove possible trailing args
             if args not in HBNBCommand.classes:
                 print("** class doesn't exist **")
                 return
-            for k, v in storage._FileStorage__objects.items():
-                if k.split(".")[0] == args:
-                    print_list.append(str(v))
+            for obj in storage.all(HBNBCommand.classes[args]).values():
+                objects.append(str(obj))
         else:
-            for k, v in storage._FileStorage__objects.items():
-                print_list.append(str(v))
-
-        print(print_list)
+            for obj in storage.all().values():
+                objects.append(str(obj))
+        print(objects)
 
     def help_all(self):
         """Help information for the all command"""
@@ -365,4 +364,10 @@ class HBNBCommand(cmd.Cmd):
 
 
 if __name__ == "__main__":
+    # if len(sys.argv) > 1:
+    #     # Non-interactive mode - process arguments as commands
+    #     command = " ".join(sys.argv[1:])
+    #     HBNBCommand().onecmd(command)
+    # else:
+    #     # Interactive mode
     HBNBCommand().cmdloop()
