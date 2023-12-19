@@ -8,6 +8,7 @@ from sqlalchemy.orm import sessionmaker, scoped_session
 from models.base_model import Base
 from models.city import City
 from models.state import State
+from models.user import User
 
 
 class DBStorage:
@@ -30,7 +31,7 @@ class DBStorage:
     def all(self, cls=None):
         """Returns a dictionary of models currently in the database"""
         dictionary = {}
-        classes = [cls] if cls else [State, City]
+        classes = [cls] if cls else [State, City, User]
         for cls in classes:
             objs = self.__session.query(cls).all()
             for obj in objs:
@@ -53,9 +54,6 @@ class DBStorage:
 
     def reload(self):
         """Loads objects from the databas"""
-        from models.city import City
-        from models.state import State
-
         Base.metadata.create_all(self.__engine)
         Session = sessionmaker(bind=self.__engine, expire_on_commit=False)
         self.__session = scoped_session(Session)
