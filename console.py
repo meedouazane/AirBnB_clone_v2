@@ -244,13 +244,12 @@ class HBNBCommand(cmd.Cmd):
     def do_all(self, args):
         """Shows all objects, or all objects of a class"""
         objects = []
-
         if args:
-            args = args.split(" ")[0]  # remove possible trailing args
-            if args not in HBNBCommand.classes:
+            cls_name = args.split(" ")[0]  # remove possible trailing args
+            if cls_name not in HBNBCommand.classes:
                 print("** class doesn't exist **")
                 return
-            for obj in storage.all(HBNBCommand.classes[args]).values():
+            for obj in storage.all(HBNBCommand.classes[cls_name]).values():
                 objects.append(str(obj))
         else:
             for obj in storage.all().values():
@@ -364,10 +363,4 @@ class HBNBCommand(cmd.Cmd):
 
 
 if __name__ == "__main__":
-    # if len(sys.argv) > 1:
-    #     # Non-interactive mode - process arguments as commands
-    #     command = " ".join(sys.argv[1:])
-    #     HBNBCommand().onecmd(command)
-    # else:
-    #     # Interactive mode
     HBNBCommand().cmdloop()
