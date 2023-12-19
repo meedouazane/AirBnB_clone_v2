@@ -112,59 +112,31 @@ class HBNBCommand(cmd.Cmd):
         """Overrides the emptyline method of CMD"""
         pass
 
-    def parse_parameters(self, args):
-        """Parse the parameters for the do_create method"""
-        attributes = {}
-        while args:
-            key = value = ""
-            key, _, args = args.partition("=")
-            key = key.strip()
-
-            if args and args[0] == '"':
-                i = 1
-                while True:
-                    second_quote = args.find('"', i)
-                    if second_quote == -1 or args[second_quote - 1] != "\\":
-                        break
-                    i = second_quote + 1
-                if second_quote > 0:
-                    value = args[1:second_quote]
-                    value = value.replace('\\"', '"').replace("_", " ")
-                    args = args[second_quote + 1 :].strip()
-            elif args:
-                value = args.split()[0]
-                if "." in value:
-                    try:
-                        value = float(value)
-                    except ValueError:
-                        key = ""
-                else:
-                    try:
-                        value = int(value)
-                    except ValueError:
-                        key = ""
-                next_idx = args.find(" ", 1) + 1
-                args = args[next_idx:].strip() if next_idx else ""
-
-            if key and value:
-                attributes[key] = value
-
-        return attributes
-
-    def do_create(self, line):
+    def do_create(self, args):
         """Create an object of any class"""
-        if not line:
+        cmd = args.split()
+        attributes = {}
+        if not args:
             print("** class name missing **")
             return
-        args = line.partition(" ")
-        cls = args[0].strip()
-        if cls not in HBNBCommand.classes:
+        elif cmd[0] not in HBNBCommand.classes:
             print("** class doesn't exist **")
             return
-        attributes = {}
-        if args[2]:
-            attributes = self.parse_parameters(args[2])
-        new_instance = HBNBCommand.classes[cls]()
+        elif len(cmd) > 1:
+            for i in range(1, len(cmd)):
+                param = cmd[i].split("=")
+                key = param[0]
+                if '"' in param[1]:
+                    value = param[1].replace('"', "")
+                    value = value.replace("_", " ").replace('\\"', '"')
+                    attributes[key] = value
+                else:
+                    if "." in param[1]:
+                        value = float(param[1])
+                    else:
+                        value = int(param[1])
+                    attributes[key] = value
+        new_instance = HBNBCommand.classes[cmd[0]]()
         for key, value in attributes.items():
             setattr(new_instance, key, value)
         BaseModel.save(new_instance)
