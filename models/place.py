@@ -4,6 +4,7 @@ Place Module for HBNB project
 """
 
 from sqlalchemy import Column, String, Integer, Float, ForeignKey
+from sqlalchemy.orm import relationship
 from models.base_model import BaseModel, Base
 
 
@@ -24,3 +25,21 @@ class Place(BaseModel, Base):
     price_by_night = Column(Integer, nullable=False, default=0)
     latitude = Column(Float)
     longitude = Column(Float)
+
+    reviews = relationship(
+        "Review", backref="place", cascade="all, delete-orphan"
+    )
+
+    @property
+    def reviews(self):
+        """Returns the list of Review instances with
+        place_id equals to the current Place.id"""
+        from models import storage
+        from models.review import Review
+
+        all_reviews = storage.all(Review)
+        return [
+            review
+            for review in all_reviews.values()
+            if review.place_id == self.id
+        ]

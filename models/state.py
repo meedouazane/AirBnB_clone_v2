@@ -20,7 +20,8 @@ class State(BaseModel, Base):
 
     @property
     def cities(self):
-        """"""
+        """Returns the list of City instances with
+        state_id equals to the current State.id"""
         from models import storage
         from models.city import City
 
