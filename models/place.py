@@ -3,9 +3,28 @@
 Place Module for HBNB project
 """
 
-from sqlalchemy import Column, String, Integer, Float, ForeignKey
+from sqlalchemy import Column, String, Integer, Float, ForeignKey, Table
 from sqlalchemy.orm import relationship
 from models.base_model import BaseModel, Base
+from models.amenity import Amenity
+
+
+place_amenity = Table(
+    "place_amenity",
+    Base.metadata,
+    Column(
+        "place_id",
+        String(60),
+        ForeignKey("places.id"),
+        primary_key=True,
+    ),
+    Column(
+        "amenity_id",
+        String(60),
+        ForeignKey("amenities.id"),
+        primary_key=True,
+    ),
+)
 
 
 class Place(BaseModel, Base):
@@ -26,8 +45,19 @@ class Place(BaseModel, Base):
     latitude = Column(Float)
     longitude = Column(Float)
 
+    amenity_ids = []
+
     reviews = relationship(
-        "Review", backref="place", cascade="all, delete-orphan"
+        "Review",
+        backref="place",
+        cascade="all, delete-orphan",
+    )
+
+    amenities = relationship(
+        "Amenity",
+        secondary=place_amenity,
+        back_populates="places",
+        viewonly=False,
     )
 
     @property
@@ -43,3 +73,14 @@ class Place(BaseModel, Base):
             for review in all_reviews.values()
             if review.place_id == self.id
         ]
+
+    @property
+    def amenities(self):
+        """amenities getter"""
+        return self.amenity_ids
+
+    @amenities.setter
+    def amenities(self, obj):
+        """amenities setter"""
+        if isinstance(obj, Amenity):
+            self.amenity_ids.append(obj.id)

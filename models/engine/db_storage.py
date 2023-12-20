@@ -11,6 +11,7 @@ from models.state import State
 from models.user import User
 from models.place import Place
 from models.review import Review
+from models.amenity import Amenity
 
 
 class DBStorage:
@@ -33,7 +34,7 @@ class DBStorage:
     def all(self, cls=None):
         """Returns a dictionary of models currently in the database"""
         dictionary = {}
-        classes = [cls] if cls else [State, City, User, Place]
+        classes = [cls] if cls else [State, City, User, Place, Review, Amenity]
         for cls in classes:
             objs = self.__session.query(cls).all()
             for obj in objs:
