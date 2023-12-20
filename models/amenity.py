@@ -17,9 +17,7 @@ class Amenity(BaseModel, Base):
 
     name = Column(String(128), nullable=False)
 
-    amenities = relationship(
-        "Amenity",
+    place_amenities = relationship(
+        "Place",
         secondary="place_amenity",
-        back_populates="amenities",
-        viewonly=False,
     )
