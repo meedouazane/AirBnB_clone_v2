@@ -77,7 +77,14 @@ class Place(BaseModel, Base):
     @property
     def amenities(self):
         """amenities getter"""
-        return self.amenity_ids
+        from models import storage
+
+        all_amenities = storage.all(Amenity)
+        return [
+            amenity
+            for amenity in all_amenities.values()
+            if amenity.id in self.amenity_ids
+        ]
 
     @amenities.setter
     def amenities(self, obj):
