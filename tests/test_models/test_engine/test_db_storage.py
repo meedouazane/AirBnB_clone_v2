@@ -1,5 +1,7 @@
 #!/usr/bin/python3
-"""document document"""
+"""
+Unittes for DBStorage class
+"""
 
 from models.engine.db_storage import DBStorage
 import os
@@ -8,11 +10,13 @@ import unittest
 
 @unittest.skipIf(
     os.getenv("HBNB_TYPE_STORAGE") != "db",
-    "Test is not relevant for DBStorage",
+    "requires DBStorage",
 )
 class test_DB_Storage(unittest.TestCase):
-    """document document"""
+    """
+    DBStorage tests
+    """
 
     def test_documentation(self):
-        """document document"""
+        """Documentation test"""
         self.assertIsNot(DBStorage.__doc__, None)
