@@ -22,26 +22,16 @@ class BaseModel:
 
     def __init__(self, *args, **kwargs):
         """Instatntiates a new model"""
-        if not kwargs:
-            self.id = str(uuid4())
-            self.created_at = datetime.now()
-            self.updated_at = datetime.now()
-        else:
-            if "id" not in kwargs:
-                kwargs["id"] = str(uuid4())
-            if "created_at" not in kwargs:
-                kwargs["created_at"] = str(datetime.now().isoformat())
-            if "updated_at" not in kwargs:
-                kwargs["updated_at"] = str(datetime.now().isoformat())
-            kwargs["updated_at"] = datetime.strptime(
-                kwargs["updated_at"], "%Y-%m-%dT%H:%M:%S.%f"
-            )
-            kwargs["created_at"] = datetime.strptime(
-                kwargs["created_at"], "%Y-%m-%dT%H:%M:%S.%f"
-            )
-            if "__class__" in kwargs:
-                del kwargs["__class__"]
+        self.id = str(uuid4())
+        self.created_at = datetime.now()
+        self.updated_at = datetime.now()
+
+        if kwargs:
             for key, value in kwargs.items():
+                if key == "__class__":
+                    continue
+                if key in ["created_at", "updated_at"]:
+                    value = datetime.strptime(value, "%Y-%m-%dT%H:%M:%S.%f")
                 setattr(self, key, value)
 
     def save(self):
@@ -68,5 +58,5 @@ class BaseModel:
     def __str__(self):
         """Returns a string representation of the instance"""
         return "[{}] ({}) {}".format(
-            self.__class__.__name__, self.id, self.to_dict()
+            self.__class__.__name__, self.id, self.__dict__
         )
