@@ -17,9 +17,10 @@ def do_deploy(archive_path):
         run(f"mkdir -p /data/web_static/releases/{file_name}/")
         run(f"tar -xzf /tmp/{file_name_ext} -C "
             f"/data/web_static/releases/{file_name}/")
-        run(f"rm -rf /tmp/{file_name_ext}")
+        run(f"rm /tmp/{file_name_ext}")
         '''run(f"mv /data/web_static/releases/{file_name}/web_static/* "
             f"/data/web_static/releases/{file_name}/")'''
+        run("rm -rf /data/web_static/releases/{file_name}/web_static")
         run("rm -rf /data/web_static/current")
         run(f"ln -s /data/web_static/releases/{file_name}/"
             f" /data/web_static/current")
