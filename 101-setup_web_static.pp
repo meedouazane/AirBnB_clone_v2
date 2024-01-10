@@ -3,31 +3,31 @@
 file { '/data':
   ensure => 'directory',
   owner  => 'ubuntu',
-  group  => 'ubuntu'
+  group  => 'ubuntu',
 }
 file { '/data/web_static':
   ensure => 'directory',
   owner  => 'ubuntu',
-  group  => 'ubuntu'
+  group  => 'ubuntu',
 }
 file { '/data/web_static/releases':
   ensure => 'directory',
   owner  => 'ubuntu',
-  group  => 'ubuntu'
+  group  => 'ubuntu',
 }
 file { '/data/web_static/releases/test/':
   ensure => 'directory',
   owner  => 'ubuntu',
-  group  => 'ubuntu'
+  group  => 'ubuntu',
 }
 file { '/data/web_static/shared/':
   ensure => 'directory',
   owner  => 'ubuntu',
-  group  => 'ubuntu'
+  group  => 'ubuntu',
 }
 file {'/data/web_static/releases/test/index.html':
   ensure  => file,
-  content => 'Hello World! this is from Airbnb',
+  content => 'Hello World! this is from Airbnb\n',
 }
 exec { 'create_alias':
   command => 'ln -sfT /data/web_static/releases/test/ /data/web_static/current',
