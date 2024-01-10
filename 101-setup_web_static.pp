@@ -5,12 +5,12 @@ file { /data:
   owner  => 'ubuntu',
   group  => 'ubuntu'
 }
-file { /data/web_static:
+file { /data/'web_static':
   ensure => 'directory',
   owner  => 'ubuntu',
   group  => 'ubuntu'
 }
-file { /data/web_static/releases:
+file { /data/web_static/'releases':
   ensure => 'directory',
   owner  => 'ubuntu',
   group  => 'ubuntu'
@@ -30,8 +30,8 @@ file {'/data/web_static/releases/test/index.html':
   content => 'Hello World! this is from Airbnb',
 }
 exec { 'create_alias':
-  command     => "ln -sfT /data/web_static/releases/test/ /data/web_static/current",
-  path        => ['/bin', '/usr/bin'],
+  command => 'ln -sfT /data/web_static/releases/test/ /data/web_static/current',
+  path    => ['/bin', '/usr/bin'],
 }
 # update ubuntu server
 exec { 'update server':
@@ -39,15 +39,15 @@ exec { 'update server':
   user     => 'root',
   provider => 'shell',
 }
-->
+
 #install nginx
-package {'nginx':
+-> package {'nginx':
   ensure   => 'installed',
   provider => apt,
 }
-->
+
 # editing config file
-file {'/etc/nginx/sites-available/default':
+-> file {'/etc/nginx/sites-available/default':
   ensure  => file,
   content => '
 server {
@@ -56,18 +56,18 @@ server {
         root /var/www/html;
         index index.html;
         server_name _;
-	location /hbnb_static {
-        	alias /data/web_static/current;
-    	}
+        location /hbnb_static {
+                alias /data/web_static/current;
+        }
         location / {
                 try_files $uri $uri/ =404;
         }
 }',
   notify  => Service['nginx'],
 }
-->
+
 # starting service
-service { 'nginx':
+-> service { 'nginx':
   ensure  => running,
   enable  => true,
   require => Package['nginx'],
