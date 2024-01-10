@@ -1,14 +1,14 @@
 #!/usr/bin/python3
 ''' distributes an archive to your web servers '''
 from fabric.api import env, run, put
-
+from os.path import exists
 
 env.hosts = ['54.167.181.186', '35.153.194.155']
 
 
 def do_deploy(archive_path):
     """ Deploy archive! """
-    if archive_path:
+    if exists(archive_path) is True:
         try:
             put(archive_path, '/tmp/')
             file_name_ext = archive_path.split('/')[1]
