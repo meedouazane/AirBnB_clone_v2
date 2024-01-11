@@ -5,10 +5,15 @@ from os.path import exists
 
 
 env.hosts = ['54.167.181.186', '35.153.194.155']
+env.user = 'ubuntu'
+env.key_filename = '~/.ssh/school'
 
 
 def do_deploy(archive_path):
-    """ Deploy archive! """
+    """
+    Deploy archive!
+    archive_path: path of archive
+    """
     if exists(archive_path) is False:
         return False
     file_name_ext = archive_path.split('/')[1]
@@ -25,6 +30,7 @@ def do_deploy(archive_path):
         run("rm -rf /data/web_static/current")
         run(f"ln -s /data/web_static/releases/{file_name}/"
             f" /data/web_static/current")
+        print("New version deployed!")
         return True
     except Exception:
         return False
