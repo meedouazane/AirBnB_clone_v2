@@ -1,57 +1,56 @@
-#!/usr/bin/env bash
 # Puppet for setup
 file { '/data':
-  ensure => 'directory',
-}
+  ensure  => 'directory'
+} ->
 file { '/data/web_static':
-  ensure => 'directory',
-}
+  ensure => 'directory'
+} ->
 file { '/data/web_static/releases':
-  ensure => 'directory',
-}
-file { '/data/web_static/releases/test/':
-  ensure => 'directory',
-}
-file { '/data/web_static/shared/':
-  ensure => 'directory',
-}
-file {'/data/web_static/releases/test/index.html':
+  ensure => 'directory'
+} ->
+file { '/data/web_static/releases/test':
+  ensure => 'directory'
+} ->
+
+file { '/data/web_static/shared':
+  ensure => 'directory'
+} ->
+
+file { '/data/web_static/releases/test/index.html':
   ensure  => 'present',
-  content => 'Hello World! this is from Airbnb\n',
-}
+  content => "Hello World! this is from Airbnb\n\n"
+} ->
+
 file { '/data/web_static/current':
   ensure => 'link',
   target => '/data/web_static/releases/test'
 } ->
+
 exec { 'chown -R ubuntu:ubuntu /data/':
   path => '/usr/bin/:/usr/local/bin/:/bin/'
 }
+
 file { '/var/www':
   ensure => 'directory'
 } ->
+
 file { '/var/www/html':
   ensure => 'directory'
 } ->
+
 file { '/var/www/html/index.html':
   ensure  => 'present',
-  content => "Holberton School Nginx\n"
+  content => "Holberton School Nginx\n\n"
 } ->
+
 file { '/var/www/html/404.html':
   ensure  => 'present',
-  conten
-# update ubuntu server
-exec { 'update server':
-  command  => 'apt-get update',
-  user     => 'root',
-  provider => 'shell',
-}
-
-#install nginx
--> package {'nginx':
-  ensure   => 'installed',
-  provider => apt,
-}
-
+  content => "Ceci n'est pas une page\n"
+} ->
+package { 'nginx':
+  ensure   => 'present',
+  provider => 'apt'
+} ->
 # editing config file
 -> file {'/etc/nginx/sites-available/default':
   ensure  => file,
