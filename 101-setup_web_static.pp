@@ -2,37 +2,43 @@
 # Puppet for setup
 file { '/data':
   ensure => 'directory',
-  owner  => 'ubuntu',
-  group  => 'ubuntu',
 }
 file { '/data/web_static':
   ensure => 'directory',
-  owner  => 'ubuntu',
-  group  => 'ubuntu',
 }
 file { '/data/web_static/releases':
   ensure => 'directory',
-  owner  => 'ubuntu',
-  group  => 'ubuntu',
 }
 file { '/data/web_static/releases/test/':
   ensure => 'directory',
-  owner  => 'ubuntu',
-  group  => 'ubuntu',
 }
 file { '/data/web_static/shared/':
   ensure => 'directory',
-  owner  => 'ubuntu',
-  group  => 'ubuntu',
 }
 file {'/data/web_static/releases/test/index.html':
-  ensure  => file,
+  ensure  => 'present',
   content => 'Hello World! this is from Airbnb\n',
 }
-exec { 'create_alias':
-  command => 'ln -sfT /data/web_static/releases/test/ /data/web_static/current',
-  path    => ['/bin', '/usr/bin'],
+file { '/data/web_static/current':
+  ensure => 'link',
+  target => '/data/web_static/releases/test'
+} ->
+exec { 'chown -R ubuntu:ubuntu /data/':
+  path => '/usr/bin/:/usr/local/bin/:/bin/'
 }
+file { '/var/www':
+  ensure => 'directory'
+} ->
+file { '/var/www/html':
+  ensure => 'directory'
+} ->
+file { '/var/www/html/index.html':
+  ensure  => 'present',
+  content => "Holberton School Nginx\n"
+} ->
+file { '/var/www/html/404.html':
+  ensure  => 'present',
+  conten
 # update ubuntu server
 exec { 'update server':
   command  => 'apt-get update',
