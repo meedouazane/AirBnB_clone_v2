@@ -3,6 +3,7 @@
 from fabric.api import env, run, put
 from os.path import exists
 
+
 env.hosts = ['54.167.181.186', '35.153.194.155']
 
 
@@ -18,8 +19,8 @@ def do_deploy(archive_path):
         run(f"tar -xzf /tmp/{file_name_ext} -C "
             f"/data/web_static/releases/{file_name}/")
         run(f"rm /tmp/{file_name_ext}")
-        '''run(f"mv /data/web_static/releases/{file_name}/web_static/* "
-            f"/data/web_static/releases/{file_name}/")'''
+        run(f"mv /data/web_static/releases/{file_name}/web_static/* "
+            f"/data/web_static/releases/{file_name}/")
         run(f"rm -rf /data/web_static/releases/{file_name}/web_static")
         run("rm -rf /data/web_static/current")
         run(f"ln -s /data/web_static/releases/{file_name}/"
