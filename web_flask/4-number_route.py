@@ -35,7 +35,6 @@ def text_python(text):
 
 @app.route('/number/<int:n>', strict_slashes=False)
 def n_type(n):
-    n = str(n)
     return f"{n} is a number"
 
 
