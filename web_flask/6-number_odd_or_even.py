@@ -33,31 +33,19 @@ def text_python(text):
     return f"Python {text}"
 
 
-@app.route('/number/<n>', strict_slashes=False)
+@app.route('/number/<int:n>', strict_slashes=False)
 def n_type(n):
-    try:
-        n = int(n)
-        return f"{n} is a number"
-    except ValueError:
-        pass
+    return f"{n} is a number"
 
 
-@app.route('/number_template/<n>', strict_slashes=False)
+@app.route('/number_template/<int:n>', strict_slashes=False)
 def n_type_html(n):
-    try:
-        n = int(n)
-        return render_template('5-number.html', number=n)
-    except ValueError:
-        pass
+    return render_template('5-number.html', number=n)
 
 
-@app.route('/number_odd_or_even/<n>', strict_slashes=False)
+@app.route('/number_odd_or_even/<int:n>', strict_slashes=False)
 def even_odd(n):
-    try:
-        n = int(n)
-        return render_template('6-number_odd_or_even.html', number=n)
-    except ValueError:
-        pass
+    return render_template('6-number_odd_or_even.html', number=n)
 
 
 if __name__ == '__main__':
