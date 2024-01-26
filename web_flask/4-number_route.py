@@ -29,11 +29,8 @@ def text_python_default():
 
 @app.route('/python/<text>', strict_slashes=False)
 def text_python(text):
-    if (text):
-        text = text.replace('_', ' ')
-        return f"Python {text}"
-    else:
-        return "Python is cool"
+    text = text.replace('_', ' ')
+    return f"Python {text}"
 
 
 @app.route('/number/<n>', strict_slashes=False)
