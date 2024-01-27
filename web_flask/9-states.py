@@ -9,11 +9,15 @@ app = Flask(__name__, template_folder='templates/')
 
 
 @app.route('/states', strict_slashes=False)
+def states_html():
+    all_states = storage.all()
+    return render_template('9-states.html', states=all_states)
+
+
 @app.route('/states/<id>', strict_slashes=False)
 def states_id(id):
     all_states = storage.all(State)
-    if id:
-        id = 'State.' + id
+    id = 'State.' + id
     return render_template('9-states.html', states=all_states, s_id=id)
 
 
