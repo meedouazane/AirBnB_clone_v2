@@ -13,5 +13,10 @@ def cities_by_states():
     return render_template('8-cities_by_states.html', states=all_states)
 
 
+@app.teardown_appcontext
+def close_session():
+    ''' remove the current SQLAlchemy Session '''
+    storage.close()
+
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000)
