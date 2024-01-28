@@ -26,10 +26,12 @@ article {
 
 .headline {
 	display: flex;
+	flex-direction: row;
 	position: relative;
-	justify-content: space-between;
+
 	height: 80px;
-  }
+	width: 100%;
+}
 
 .price_by_night {
 	display: flex;
